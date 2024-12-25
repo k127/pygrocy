@@ -160,8 +160,15 @@ class CurrentVolatilStockResponse(BaseModel):
 
 
 class ProductBarcodeData(BaseModel):
+    id: int
+    product_id: int
     barcode: str
+    qu_id: int
     amount: Optional[float] = None
+    shopping_location_id: int
+    last_price: Optional[float] = None
+    row_created_timestamp: str
+    note: str
 
 
 class ProductDetailsResponse(BaseModel):

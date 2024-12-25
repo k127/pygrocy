@@ -18,16 +18,51 @@ from pygrocy.grocy_api_client import (
 
 class ProductBarcode(DataModel):
     def __init__(self, data: ProductBarcodeData):
+        self._id = data.id
+        self._product_id = data.product_id
         self._barcode = data.barcode
+        self._qu_id = data.qu_id
         self._amount = float(data.amount) if data.amount else None
+        self._shopping_location_id = data.shopping_location_id
+        self._last_price = float(data.last_price) if data.last_price else None
+        self._row_created_timestamp = data.row_created_timestamp
+        self._note = data.note
+
+    @property
+    def id(self) -> int:
+        return self._id
+
+    @property
+    def product_id(self) -> int:
+        return self._product_id
 
     @property
     def barcode(self) -> str:
         return self._barcode
 
     @property
+    def qu_id(self) -> int:
+        return self._qu_id
+
+    @property
     def amount(self) -> Optional[float]:
         return self._amount
+
+    @property
+    def shopping_location_id(self) -> int:
+        return self._shopping_location_id
+
+    @property
+    def last_price(self) -> Optional[float]:
+        return self._last_price
+
+    @property
+    def row_created_timestamp(self) -> str:
+        return self._row_created_timestamp
+
+    @property
+    def note(self) -> str:
+        return self._note
 
 
 class QuantityUnit(DataModel):
