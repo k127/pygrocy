@@ -391,6 +391,16 @@ class Grocy(object):
             entity_type.value, query_filters
         )
 
+    def get_objects(
+        self,
+        entity_type: str | EntityType,
+        query_filters: list[str] | None = None,
+    ) -> list[dict]:
+        return self._api_client.get_objects(entity_type, query_filters)
+
+    def get_object(self, entity_type: str | EntityType, object_id: int) -> dict:
+        return self._api_client.get_object(entity_type, object_id)
+
     def meal_plan_sections(
         self, query_filters: list[str] | None = None
     ) -> list[MealPlanSection]:

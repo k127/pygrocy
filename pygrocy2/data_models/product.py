@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pygrocy2.base import DataModel
 from pygrocy2.grocy_api_client import (
@@ -17,16 +18,62 @@ from pygrocy2.grocy_api_client import (
 
 class ProductBarcode(DataModel):
     def __init__(self, data: ProductBarcodeData):
+        self._id = int(data.id) if data.id is not None else None
+        self._product_id = int(data.product_id) if data.product_id is not None else None
         self._barcode = data.barcode
-        self._amount = float(data.amount) if data.amount else None
+        self._qu_id = int(data.qu_id) if data.qu_id is not None else None
+        self._amount = float(data.amount) if data.amount is not None else None
+        self._shopping_location_id = (
+            int(data.shopping_location_id)
+            if data.shopping_location_id is not None
+            else None
+        )
+        self._last_price = (
+            float(data.last_price) if data.last_price is not None else None
+        )
+        self._row_created_timestamp = data.row_created_timestamp
+        self._note = data.note
+        self._userfields = data.userfields
+
+    @property
+    def id(self) -> int | None:
+        return self._id
+
+    @property
+    def product_id(self) -> int | None:
+        return self._product_id
 
     @property
     def barcode(self) -> str:
         return self._barcode
 
     @property
+    def qu_id(self) -> int | None:
+        return self._qu_id
+
+    @property
     def amount(self) -> float | None:
         return self._amount
+
+    @property
+    def shopping_location_id(self) -> int | None:
+        return self._shopping_location_id
+
+    @property
+    def last_price(self) -> float | None:
+        return self._last_price
+
+    @property
+    def row_created_timestamp(self) -> datetime | None:
+        return self._row_created_timestamp
+
+    @property
+    def note(self) -> str | None:
+        return self._note
+
+    @property
+    def userfields(self) -> dict[str, Any] | None:
+        return self._userfields
 
 
 class QuantityUnit(DataModel):

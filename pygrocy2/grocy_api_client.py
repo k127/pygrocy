@@ -158,8 +158,16 @@ class CurrentVolatilStockResponse(BaseModel):
 
 
 class ProductBarcodeData(BaseModel):
+    id: int | None = None
+    product_id: int | None = None
     barcode: str
+    qu_id: int | None = None
     amount: float | None = None
+    shopping_location_id: int | None = None
+    last_price: float | None = None
+    row_created_timestamp: datetime | None = None
+    note: str | None = None
+    userfields: dict[str, Any] | None = None
 
 
 class ProductDetailsResponse(BaseModel):
@@ -813,7 +821,7 @@ class GrocyApiClient(object):
         return self._do_post_request(f"objects/{entity_type}", data)
 
     def get_generic(self, entity_type: str, object_id: int):
-        return self._do_get_request(f"objects/{entity_type}/{object_id}")
+        return self.get_object(entity_type, object_id)
 
     def update_generic(self, entity_type: str, object_id: int, data):
         return self._do_put_request(f"objects/{entity_type}/{object_id}", data)
@@ -824,9 +832,23 @@ class GrocyApiClient(object):
     def get_generic_objects_for_type(
         self, entity_type: str | Enum, query_filters: list[str] | None = None
     ):
-        if isinstance(entity_type, Enum):
-            entity_type = entity_type.value
+        return self.get_objects(entity_type, query_filters)
+
+    def get_objects(
+        self, entity_type: str | Enum, query_filters: list[str] | None = None
+    ) -> list[dict[str, Any]]:
+        entity_type = self._entity_url_segment(entity_type)
         return self._do_get_request(f"objects/{entity_type}", query_filters)
+
+    def get_object(self, entity_type: str | Enum, object_id: int) -> dict[str, Any]:
+        entity_type = self._entity_url_segment(entity_type)
+        return self._do_get_request(f"objects/{entity_type}/{object_id}")
+
+    @staticmethod
+    def _entity_url_segment(entity_type: str | Enum) -> str:
+        if isinstance(entity_type, Enum):
+            return entity_type.value
+        return entity_type
 
     def get_meal_plan_sections(
         self, query_filters: list[str] | None = None
